@@ -5,6 +5,7 @@ use uefi::prelude::*;
 
 #[entry]
 fn main() -> Status {
+    uefi::boot::set_watchdog_timer(0, 0x10000, None).unwrap();
     uefi::helpers::init().unwrap();
 
     uefi::system::with_stdout(|stdout| {
