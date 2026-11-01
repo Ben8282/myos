@@ -1,6 +1,9 @@
 #![no_std]
 #![no_main]
 
+extern crate alloc;
+
+use alloc::string::String;
 use uefi::prelude::*;
 use uefi::proto::console::text::Key;
 use uefi::{boot, print, println, system};
@@ -23,6 +26,9 @@ fn main() -> Status {
     println!();
     println!("MyOS initialized successfully.");
 
+    let mut last_pressed_key = ' ';
+    let mut buffer = String::new();
+
     loop {
         // Sleep until a key is pressed, then read it
         let key = system::with_stdin(|stdin| {
@@ -36,9 +42,14 @@ fn main() -> Status {
             let ch = char::from(c);
             if ch == '\r' {
                 println!();
+                println!("{}", buffer);
+                buffer.clear();
             } else {
                 print!("{}", ch);
+                last_pressed_key = ch;
+                buffer.push(ch);
             }
         }
+        
     }
 }
