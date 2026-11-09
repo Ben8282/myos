@@ -26,8 +26,10 @@ fn main() -> Status {
     println!();
     println!("MyOS initialized successfully.");
 
-    let mut last_pressed_key = ' ';
+    let mut last_pressed_keys = String::new();
     let mut buffer = String::new();
+
+    print!("> ");
 
     loop {
         // Sleep until a key is pressed, then read it
@@ -42,14 +44,20 @@ fn main() -> Status {
             let ch = char::from(c);
             if ch == '\r' {
                 println!();
-                println!("{}", buffer);
+                last_pressed_keys = buffer.clone();
                 buffer.clear();
+                if last_pressed_keys == "help" {
+                    print!("heres the help stuff");
+                    println!();
+                } else {
+                    print!("un-recognized command type help if your stuck");
+                    println!();
+                }
+                print!("> ");
             } else {
                 print!("{}", ch);
-                last_pressed_key = ch;
                 buffer.push(ch);
             }
         }
-        
     }
 }
